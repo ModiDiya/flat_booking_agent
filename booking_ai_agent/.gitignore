@@ -1,0 +1,15 @@
+.env
+*.json
+*.pickle
+venv/
+__pycache__/
+.DS_Store
+*.pyc
+*.pyo
+*.pyd
+.Python
+# Ignore sensitive files
+.env
+*.json
+credentials*.json
+service_account.json

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Consultation Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .chatbot-container {
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .chat-header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .chat-header p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.4;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .bot-message {
+            align-self: flex-start;
+            background-color: #f0f2f5;
+            border-bottom-left-radius: 5px;
+            color: #333;
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .option-btn {
+            background-color: #e9ecef;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .option-btn:hover {
+            background-color: #4b6cb7;
+            color: white;
+        }
+        
+        .date-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .date-btn {
+            background-color: #e9ecef;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .date-btn:hover {
+            background-color: #4b6cb7;
+            color: white;
+        }
+        
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .time-btn {
+            background-color: #e9ecef;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .time-btn:hover {
+            background-color: #4b6cb7;
+            color: white;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #e9ecef;
+            background-color: #f8f9fa;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            outline: none;
+            font-size: 1rem;
+        }
+        
+        .chat-input button {
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0 25px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        
+        .chat-input button:hover {
+            transform: scale(1.05);
+        }
+        
+        .typing-indicator {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #f0f2f5;
+            border-radius: 18px;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .typing-dots {
+            display: flex;
+        }
+        
+        .typing-dots span {
+            height: 8px;
+            width: 8px;
+            background-color: #999;
+            border-radius: 50%;
+            display: block;
+            margin: 0 2px;
+            animation: typing 1s infinite;
+        }
+        
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 20px;
+            background-color: #d4edda;
+            border-radius: 10px;
+            color: #155724;
+            margin-top: 10px;
+        }
+        
+        @media (max-width: 600px) {
+            .chatbot-container {
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            .date-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .time-slots {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbot-container">
+        <div class="chat-header">
+            <h1>Real Estate Consultation Booking</h1>
+            <p>I can help you schedule an appointment with our agents</p>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+                Hello! I'm your real estate booking assistant. How can I help you today?
+            </div>
+            <div class="message bot-message">
+                Would you like to schedule a consultation with one of our real estate experts?
+                <div class="options">
+                    <button class="option-btn" onclick="selectOption('yes')">Yes, please!</button>
+                    <button class="option-btn" onclick="selectOption('later')">Maybe later</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Type your message here..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Conversation state
+        let conversationState = {
+            step: 'welcome',
+            email: '',
+            date: '',
+            time: '',
+            description: '',
+            recurring: false
+        };
+        
+        // Available time slots (in a real app, these would come from your backend)
+        const timeSlots = [
+            "09:00 - 10:00",
+            "10:30 - 11:30",
+            "12:00 - 13:00",
+            "14:00 - 15:00",
+            "15:30 - 16:30",
+            "17:00 - 18:00"
+        ];
+        
+        // Generate dates for the next 7 days
+        function generateDates() {
+            const dates = [];
+            const today = new Date();
+            
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                
+                // Skip weekends (optional)
+                if (date.getDay() !== 0 && date.getDay() !== 6) {
+                    const dateString = date.toISOString().split('T')[0];
+                    const displayDate = date.toLocaleDateString('en-US', { 
+                        weekday: 'short', 
+                        month: 'short', 
+                        day: 'numeric' 
+                    });
+                    
+                    dates.push({ value: dateString, display: displayDate });
+                }
+            }
+            
+            return dates;
+        }
+        
+        // Add a message to the chat
+        function addMessage(message, isUser = false) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            messageDiv.innerHTML = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Show typing indicator
+        function showTypingIndicator() {
+            const chatMessages = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot-message typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Hide typing indicator
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // Handle option selection
+        function selectOption(option) {
+            if (option === 'yes') {
+                conversationState.step = 'get_email';
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    addMessage('Great! To get started, please provide your email address:');
+                }, 1000);
+            } else if (option === 'later') {
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    addMessage('No problem! Feel free to come back anytime you\'re ready to schedule a consultation.');
+                }, 1000);
+            } else if (option.startsWith('date_')) {
+                const selectedDate = option.replace('date_', '');
+                conversationState.date = selectedDate;
+                conversationState.step = 'get_time';
+                
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    addMessage(`Perfect! Now please select a time slot for ${new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}:`);
+                    
+                    // Show time slots
+                    const timeOptions = timeSlots.map(slot => 
+                        `<button class="time-btn" onclick="selectOption('time_${slot}')">${slot}</button>`
+                    ).join('');
+                    
+                    addMessage(`<div class="time-slots">${timeOptions}</div>`);
+                }, 1000);
+            } else if (option.startsWith('time_')) {
+                const selectedTime = option.replace('time_', '');
+                conversationState.time = selectedTime;
+                conversationState.step = 'get_description';
+                
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    addMessage(`Excellent! You've selected ${conversationState.time} on ${new Date(conversationState.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}.`);
+                    addMessage('Would you like to add any specific details or topics you want to discuss during the consultation? (Optional)');
+                }, 1000);
+            } else if (option === 'no_description') {
+                conversationState.step = 'confirm_booking';
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    confirmBooking();
+                }, 1000);
+            } else if (option === 'confirm_booking') {
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    completeBooking();
+                }, 2000);
+            }
+        }
+        
+        // Confirm booking details
+        function confirmBooking() {
+            const dateStr = new Date(conversationState.date).toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            addMessage(`Please confirm your booking details:<br><br>
+                <strong>Email:</strong> ${conversationState.email}<br>
+                <strong>Date:</strong> ${dateStr}<br>
+                <strong>Time:</strong> ${conversationState.time}<br>
+                <strong>Description:</strong> ${conversationState.description || 'No specific details provided'}<br><br>
+                Is this information correct?`);
+            
+            addMessage(`<div class="options">
+                <button class="option-btn" onclick="selectOption('confirm_booking')">Yes, book my appointment</button>
+                <button class="option-btn" onclick="restartConversation()">No, start over</button>
+            </div>`);
+        }
+        
+        // Complete the booking
+        function completeBooking() {
+            addMessage(`<div class="success-message">
+                <h3>Booking Confirmed!</h3>
+                <p>Your real estate consultation has been scheduled successfully.</p>
+                <p>A confirmation email has been sent to <strong>${conversationState.email}</strong>.</p>
+                <p>We look forward to assisting you with your real estate needs!</p>
+            </div>`);
+            
+            // In a real application, you would send the booking data to your backend here
+            console.log('Booking details:', conversationState);
+            
+            // Reset conversation after a delay
+            setTimeout(() => {
+                restartConversation();
+            }, 8000);
+        }
+        
+        // Restart the conversation
+        function restartConversation() {
+            conversationState = {
+                step: 'welcome',
+                email: '',
+                date: '',
+                time: '',
+                description: '',
+                recurring: false
+            };
+            
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = `
+                <div class="message bot-message">
+                    Hello! I'm your real estate booking assistant. How can I help you today?
+                </div>
+                <div class="message bot-message">
+                    Would you like to schedule a consultation with one of our real estate experts?
+                    <div class="options">
+                        <button class="option-btn" onclick="selectOption('yes')">Yes, please!</button>
+                        <button class="option-btn" onclick="selectOption('later')">Maybe later</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Send a message from the user
+        function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const message = userInput.value.trim();
+            
+            if (message === '') return;
+            
+            // Add user message to chat
+            addMessage(message, true);
+            userInput.value = '';
+            
+            // Process the message based on current conversation state
+            processUserMessage(message);
+        }
+        
+        // Process the user's message
+        function processUserMessage(message) {
+            showTypingIndicator();
+            
+            setTimeout(() => {
+                hideTypingIndicator();
+                
+                if (conversationState.step === 'get_email') {
+                    // Basic email validation
+                    if (message.includes('@') && message.includes('.')) {
+                        conversationState.email = message;
+                        conversationState.step = 'get_date';
+                        
+                        addMessage('Thank you! Now, please select a date for your consultation:');
+                        
+                        // Show date options
+                        const dates = generateDates();
+                        const dateOptions = dates.map(date => 
+                            `<button class="date-btn" onclick="selectOption('date_${date.value}')">${date.display}</button>`
+                        ).join('');
+                        
+                        addMessage(`<div class="date-options">${dateOptions}</div>`);
+                    } else {
+                        addMessage('That doesn\'t look like a valid email address. Please enter a valid email:');
+                    }
+                } else if (conversationState.step === 'get_description') {
+                    conversationState.description = message;
+                    conversationState.step = 'confirm_booking';
+                    confirmBooking();
+                } else {
+                    addMessage('I\'m not sure how to respond to that. Could you please use the options provided?');
+                }
+            }, 1000);
+        }
+        
+        // Handle Enter key press
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Integration Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .demo-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #25D366;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .step {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #25D366;
+        }
+        
+        .step h3 {
+            color: #128C7E;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .step-number {
+            background: #25D366;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .qr-code {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .qr-code img {
+            max-width: 200px;
+            border: 2px solid #25D366;
+            border-radius: 10px;
+        }
+        
+        .whatsapp-button {
+            display: inline-block;
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin: 10px 5px;
+            transition: transform 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .whatsapp-button:hover {
+            transform: scale(1.05);
+            background: #128C7E;
+        }
+        
+        .whatsapp-button.secondary {
+            background: #6c757d;
+        }
+        
+        .whatsapp-button.secondary:hover {
+            background: #545b62;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .feature {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        @media (min-width: 768px) {
+            .button-group {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .whatsapp-button {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="header">
+            <h1>📱 WhatsApp Booking</h1>
+            <p>Book real estate consultations directly via WhatsApp</p>
+        </div>
+        
+        <div class="content">
+            <div class="step">
+                <h3><span class="step-number">1</span> Save Our Number</h3>
+                <p>Add this number to your contacts: <strong>+1 (415) 523-8886</strong></p>
+            </div>
+            
+            <div class="step">
+                <h3><span class="step-number">2</span> Start Conversation</h3>
+                <p>Send "Hi" to our WhatsApp number to begin booking</p>
+                <div class="button-container">
+                    <a href="https://wa.me/14155238886?text=Hi" class="whatsapp-button" target="_blank" rel="noopener noreferrer">
+                        💬 Start Chat on WhatsApp
+                    </a>
+                </div>
+            </div>
+            
+            <div class="step">
+                <h3><span class="step-number">3</span> Follow the Prompts</h3>
+                <p>Our chatbot will guide you through:</p>
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">📧</div>
+                        <div>Email Collection</div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">📅</div>
+                        <div>Date Selection</div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">⏰</div>
+                        <div>Time Slot Booking</div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">✅</div>
+                        <div>Instant Confirmation</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="note">
+                <strong>Note:</strong> For testing purposes, you can use Twilio's sandbox number. 
+                In production, you'll need to get a dedicated WhatsApp Business number.
+            </div>
+            
+            <div class="button-container">
+                <div class="button-group">
+                    <a href="/" class="whatsapp-button">🏠 Back to Web Chatbot</a>
+                    <a href="/form" class="whatsapp-button secondary">📋 Traditional Form</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add any JavaScript functionality here if needed
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('WhatsApp demo page loaded');
+            
+            // Add click tracking for analytics (optional)
+            const buttons = document.querySelectorAll('.whatsapp-button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    console.log('Button clicked:', this.textContent.trim());
+                });
+            });
+        });
+    </script>
+</body>
+</html>
